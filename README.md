@@ -4,7 +4,7 @@ Birthday Problem
 Premise
 Many of you have likely heard of the Birthday Problem Links to an external site.in the context of probability. In short, it says that if you have  people together, and assume birthdays are equally distributed across all 365 days in a year (sorry leap day people), what is the probability at least two will share a birthday? 
 
-It turns out, once , this probability exceeds 0.5. 
+It turns out, once n > 30, this probability exceeds 0.5. 
 
 In this assignment, we will study the distribution of how many days match (or repeat) given a collection of  individuals. So for example, suppose 6 people are in a room together, we may get the following outcomes:
 

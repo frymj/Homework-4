@@ -1,0 +1,126 @@
+---
+title: "Homework 4"
+author: "Matt Fry"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Background/Premise
+
+## Many of you have likely heard of the Birthday ProblemLinks to an external 
+##   site. in the context of probability. In short, it says that if you have  
+##   people together, and assume birthdays are equally distributed across all 
+##   365 days in a year (sorry leap day people), what is the probability at 
+##   least two will share a birthday? 
+
+## It turns out, once n >= 23, this probability exceeds 0.5. 
+
+## In this assignment, we will study the distribution of how many days match 
+##    (or repeat) given a collection of  individuals. So for example, suppose 
+##    6 people are in a room together, we may get the following outcomes:
+
+# Some examples of situations
+
+## All 6 have unique birthdays, thus 0 matches.
+## 2 people share a birthday, and everyone else has a unique birthday, thus 
+##    1 match.
+## 3 people share a birthday, and the other 3 people have unique birthdays, 
+##    thus 1 match.
+## 2 people share a birthday (say March 14) and another 2 people share a 
+##    birthday (say July 22), and the others have unique birthdays, thus 2 matches.
+## 3 people share a birthday (say March 14) and 2 others share a different 
+##    birthday (say July 22), with the sixth person different, thus 2 matches.
+## 3 people share a birthday (say March 14) and the other 3 share a 
+##    different birthday (say July 22), thus 2 matches.
+## 2 people share a birthday (say March 14), 2 others share a different 
+##    birthday (say July 22) and 2 others share yet another birthday 
+##    (say Oct 31), thus 3 matches.
+## 4 people share a birthday, and the other 2 people have unique birthdays, 
+##    thus 1 match.
+## 4 people share a birthday (say March 14), with the other 2 people sharing 
+##    a different birthday (say July 22), thus 2 matches.
+## 5 people share a birthday (say March 14), with the other person having 
+##    a different birthday, thus 1 match.
+## All 6 people share the same birthday, thus 1 match.
+
+```{r} 
+## #Modularization: getting R to generate random birthdays, using Julian Days
+##  and allow for user-specified num_people; set seed for 314159
+BirthdayProblem <- function(num_people=23) {
+  if(!is.numeric(num_people) || num_people < 1){
+    stop("num_people must be a whole, positive number")  
+  } # Returns meaningful error message if num_people is not logical in the
+    #   context of the problem
+  else{
+    set.seed(314159)
+    Birthdays <- sample(1:365, size = num_people, replace = TRUE)
+  }
+}
+```
+
+
+```{r}
+## #Modularization: Now, I need to add on to my original function so that
+##  it provides me with the number of matching randomly generated b-days
+set.seed(NULL)
+BirthdayProblem <- function(num_people=23) {
+  if(!is.numeric(num_people) || num_people < 1){
+    stop("num_people must be a whole, positive number")  
+  } # Returns meaningful error message if num_people is not logical in the
+    #   context of the problem
+  else{
+    Birthdays <- sample(1:365, size = num_people, replace = TRUE)
+    MatchingBirthdays <- num_people - length(unique(Birthdays))
+  }
+  print(MatchingBirthdays)
+}
+```
+
+
+```{r}
+## #Modularization: I need to run simulations now
+## For 10 through 100 people in increments of 10, I will
+##  run 100,000 simulations for each increment
+
+set.seed(314159)
+sapply(c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100), function(x){
+  Simulation <- replicate(100000, BirthdayProblem(x))
+  num_matching <- sum(Simulation > 0)
+  print(paste(x, num_matching))
+  summary(Simulation)
+  barplot(table(Simulation))
+}
+)
+## As you can see in the plots, as num_people increases, the number
+##  of matching birthdays increases as we would expect, and the bar
+##  graph becomes more normally distributed
+```
+
+
+# Stated Problem
+## Write a function in R that randomly generates a number of birthdays and 
+##    determines how many matches there are (provided above is an example). 
+##    Use this function to study the distribution of the number of matches 
+##    as a function of the number of people that are together.
+
+# Coding specifics
+
+## Your function must accept the following parameter:
+
+## num_people corresponding to the number of people that are together, 
+##    default value of 23
+## Your function shall return a single value:
+##    the number of days that have a match (see outline above for an example)
+## Demonstrate that your function works by simulating 100,000 iterations of 
+##    the process with the following details:
+
+## Set the random number generate seed to 314159 before each run of 100,000 
+##    iterations
+## Run the simulation 10 times: for num_people equal to 10, 20, 30, 40, 
+##    50, 60, 70, 80, 90 and 100 people.
+## Provide the summary() output and a bargraph for each of the simulation runs
+## Comment (as a comment or text in an Rmd) about the distribution of the 
+##    number of matches
+
+
+
